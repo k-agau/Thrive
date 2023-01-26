@@ -287,6 +287,9 @@ public class OptionsMenu : ControlWithInput
     [Export]
     public NodePath UnsavedProgressWarningPath = null!;
 
+    [Export]
+    public NodePath PatchNotesPath = null!;
+
     private static readonly List<string> LanguagesCache = TranslationServer.GetLoadedLocales().Cast<string>()
         .OrderBy(i => i, StringComparer.InvariantCulture)
         .ToList();
@@ -411,6 +414,8 @@ public class OptionsMenu : ControlWithInput
 
     private OptionsMode optionsMode;
     private OptionsTab selectedOptionsTab;
+
+    private PatchNotesDisplay patchNotesDisplay = null!;
 
     /// <summary>
     ///   Copy of the settings object that should match what is saved to the configuration file,
@@ -560,6 +565,8 @@ public class OptionsMenu : ControlWithInput
         backConfirmationBox = GetNode<CustomDialog>(BackConfirmationBoxPath);
         defaultsConfirmationBox = GetNode<CustomConfirmationDialog>(DefaultsConfirmationBoxPath);
         errorAcceptBox = GetNode<ErrorDialog>(ErrorAcceptBoxPath);
+
+        patchNotesDisplay = GetNode<PatchNotesDisplay>(PatchNotesPath);
 
         selectedOptionsTab = OptionsTab.Graphics;
 
@@ -2237,5 +2244,13 @@ public class OptionsMenu : ControlWithInput
 
         UpdateResetSaveButtonState();
         UpdateDismissedNoticeCount();
+    }
+
+    private void PatchNotesPressed()
+    {
+        GUICommon.Instance.PlayButtonPressSound();
+
+        // Show the patch notes view
+        patchNotesDisplay.PopupCenteredShrink();
     }
 }
